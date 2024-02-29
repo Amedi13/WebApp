@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <div style="width: auto; height: 100px; background: darkblue "></div>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donation Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .question {
+            margin-bottom: 10px;
+        }
+        .question label {
+            font-weight: bold;
+        }
+        .question input[type="text"],
+        .question input[type="number"] {
+            width: 200px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="question">
+        <label for="numOfPeople">How many people will be entered:</label>
+        <input type="number" id="numOfPeople">
+    </div>
+
+    <div id="donationInputs"></div>
+
+    <button onclick="submitDonations()">Submit Donations</button>
+
+    <div id="result"></div>
+
+    <script>
+        function submitDonations() {
+            var numOfPeople = parseInt(document.getElementById("numOfPeople").value);
+            var donationInputs = document.getElementById("donationInputs");
+            var result = "";
+
+            for (var i = 0; i < numOfPeople; i++) {
+                var nameInput = document.createElement("input");
+                nameInput.type = "text";
+                nameInput.placeholder = "Enter the full name for person #" + (i + 1);
+                donationInputs.appendChild(nameInput);
+                donationInputs.appendChild(document.createElement("br"));
+
+                var diezmoInput = document.createElement("input");
+                diezmoInput.type = "number";
+                diezmoInput.placeholder = "Enter amount for Diezmo";
+                donationInputs.appendChild(diezmoInput);
+                donationInputs.appendChild(document.createElement("br"));
+
+                var ofrendaInput = document.createElement("input");
+                ofrendaInput.type = "number";
+                ofrendaInput.placeholder = "Enter amount for Ofrenda";
+                donationInputs.appendChild(ofrendaInput);
+                donationInputs.appendChild(document.createElement("br"));
+
+                var misionesInput = document.createElement("input");
+                misionesInput.type = "number";
+                misionesInput.placeholder = "Enter amount for Misiones";
+                donationInputs.appendChild(misionesInput);
+                donationInputs.appendChild(document.createElement("br"));
+
+                var protInput = document.createElement("input");
+                protInput.type = "number";
+                protInput.placeholder = "Enter amount for Pro-t";
+                donationInputs.appendChild(protInput);
+                donationInputs.appendChild(document.createElement("br"));
+            }
+
+            var submitButton = document.createElement("button");
+            submitButton.textContent = "Calculate Total";
+            submitButton.onclick = calculateTotal;
+            donationInputs.appendChild(submitButton);
+        }
+
+        function calculateTotal() {
+            var names = [];
+            var diezmoAmounts = [];
+            var ofrendaAmounts = [];
+            var misionesAmounts = [];
+            var protAmounts = [];
+
+            var nameInputs = document.querySelectorAll("input[type='text']");
+            nameInputs.forEach(function(input) {
+                names.push(input.value);
+            });
+
+            var diezmoInputs = document.querySelectorAll("input[placeholder='Enter amount for Diezmo']");
+            diezmoInputs.forEach(function(input) {
+                diezmoAmounts.push(parseFloat(input.value));
+            });
+
+            var ofrendaInputs = document.querySelectorAll("input[placeholder='Enter amount for Ofrenda']");
+            ofrendaInputs.forEach(function(input) {
+                ofrendaAmounts.push(parseFloat(input.value));
+            });
+
+            var misionesInputs = document.querySelectorAll("input[placeholder='Enter amount for Misiones']");
+            misionesInputs.forEach(function(input) {
+                misionesAmounts.push(parseFloat(input.value));
+            });
+
+            var protInputs = document.querySelectorAll("input[placeholder='Enter amount for Pro-t']");
+            protInputs.forEach(function(input) {
+                protAmounts.push(parseFloat(input.value));
+            });
+
+            var result = "Donation Details:\n";
+            for (var i = 0; i < names.length; i++) {
+                result += "Name: " + names[i] + "\n";
+                result += "  Category: Diezmo\tAmount: $" + diezmoAmounts[i] + "\n";
+                result += "  Category: Ofrenda\tAmount: $" + ofrendaAmounts[i] + "\n";
+                result += "  Category: Misiones\tAmount: $" + misionesAmounts[i] + "\n";
+                result += "  Category: Pro-t\tAmount: $" + protAmounts[i] + "\n";
+            }
+
+            var total = calculateSum(diezmoAmounts) + calculateSum(ofrendaAmounts) + calculateSum(misionesAmounts) + calculateSum(protAmounts);
+            result += "\nOverall Total: $" + total.toFixed(2);
+
+            document.getElementById("result").innerText = result;
+        }
+
+        function calculateSum(arr) {
+            return arr.reduce(function(a, b) { return a + b; }, 0);
+        }
+    </script>
+</body>
+</html>
