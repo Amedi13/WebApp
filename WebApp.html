@@ -1,13 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <div style="width: auto; height: 100px; background: darkblue "></div>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Donation Details</title>
     <style>
         body {
             font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         .question {
             margin-bottom: 10px;
@@ -22,19 +32,45 @@
             border: 1px solid #ccc;
             border-radius: 4px;
         }
+        #result {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+        #result p {
+            margin: 0;
+        }
+        #result strong {
+            color: #333;
+        }
+        button {
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
     </style>
 </head>
 <body>
-    <div class="question">
-        <label for="numOfPeople">How many people will be entered:</label>
-        <input type="number" id="numOfPeople">
+    <div class="container">
+        <div class="question">
+            <label for="numOfPeople">How many people will be entered:</label>
+            <input type="number" id="numOfPeople">
+        </div>
+
+        <div id="donationInputs"></div>
+
+        <button onclick="submitDonations()">Submit Donations</button>
+
+        <div id="result"></div>
     </div>
-
-    <div id="donationInputs"></div>
-
-    <button onclick="submitDonations()">Submit Donations</button>
-
-    <div id="result"></div>
 
     <script>
         function submitDonations() {
@@ -45,39 +81,40 @@
             for (var i = 0; i < numOfPeople; i++) {
                 var nameInput = document.createElement("input");
                 nameInput.type = "text";
-                nameInput.placeholder = "Enter the full name for person #" + (i + 1);
+                nameInput.placeholder = "Name" + (i + 1);
                 donationInputs.appendChild(nameInput);
-                donationInputs.appendChild(document.createElement("br"));
+                donationInputs.appendChild(document.createElement("br")); // Add line break
 
                 var diezmoInput = document.createElement("input");
                 diezmoInput.type = "number";
                 diezmoInput.placeholder = "Enter amount for Diezmo";
                 donationInputs.appendChild(diezmoInput);
-                donationInputs.appendChild(document.createElement("br"));
+                donationInputs.appendChild(document.createElement("br")); // Add line break
 
                 var ofrendaInput = document.createElement("input");
                 ofrendaInput.type = "number";
                 ofrendaInput.placeholder = "Enter amount for Ofrenda";
                 donationInputs.appendChild(ofrendaInput);
-                donationInputs.appendChild(document.createElement("br"));
+                donationInputs.appendChild(document.createElement("br")); // Add line break
 
                 var misionesInput = document.createElement("input");
                 misionesInput.type = "number";
                 misionesInput.placeholder = "Enter amount for Misiones";
                 donationInputs.appendChild(misionesInput);
-                donationInputs.appendChild(document.createElement("br"));
+                donationInputs.appendChild(document.createElement("br")); // Add line break
 
                 var protInput = document.createElement("input");
                 protInput.type = "number";
                 protInput.placeholder = "Enter amount for Pro-t";
                 donationInputs.appendChild(protInput);
-                donationInputs.appendChild(document.createElement("br"));
+                donationInputs.appendChild(document.createElement("br")); // Add line break
             }
 
             var submitButton = document.createElement("button");
             submitButton.textContent = "Calculate Total";
             submitButton.onclick = calculateTotal;
             donationInputs.appendChild(submitButton);
+            donationInputs.appendChild(document.createElement("br")); // Add line break after the submit button
         }
 
         function calculateTotal() {
@@ -94,37 +131,37 @@
 
             var diezmoInputs = document.querySelectorAll("input[placeholder='Enter amount for Diezmo']");
             diezmoInputs.forEach(function(input) {
-                diezmoAmounts.push(parseFloat(input.value));
+                diezmoAmounts.push(parseFloat(input.value) || 0); // Use 0 if input value is not a valid number
             });
 
             var ofrendaInputs = document.querySelectorAll("input[placeholder='Enter amount for Ofrenda']");
             ofrendaInputs.forEach(function(input) {
-                ofrendaAmounts.push(parseFloat(input.value));
+                ofrendaAmounts.push(parseFloat(input.value) || 0); // Use 0 if input value is not a valid number
             });
 
             var misionesInputs = document.querySelectorAll("input[placeholder='Enter amount for Misiones']");
             misionesInputs.forEach(function(input) {
-                misionesAmounts.push(parseFloat(input.value));
+                misionesAmounts.push(parseFloat(input.value) || 0); // Use 0 if input value is not a valid number
             });
 
             var protInputs = document.querySelectorAll("input[placeholder='Enter amount for Pro-t']");
             protInputs.forEach(function(input) {
-                protAmounts.push(parseFloat(input.value));
+                protAmounts.push(parseFloat(input.value) || 0); // Use 0 if input value is not a valid number
             });
 
-            var result = "Donation Details:\n";
+            var result = "<div id='result'><strong>Donation Details:</strong><br>";
             for (var i = 0; i < names.length; i++) {
-                result += "Name: " + names[i] + "\n";
-                result += "  Category: Diezmo\tAmount: $" + diezmoAmounts[i] + "\n";
-                result += "  Category: Ofrenda\tAmount: $" + ofrendaAmounts[i] + "\n";
-                result += "  Category: Misiones\tAmount: $" + misionesAmounts[i] + "\n";
-                result += "  Category: Pro-t\tAmount: $" + protAmounts[i] + "\n";
+                result += "<br><strong>Name:</strong> " + names[i] + "<br>";
+                result += "<strong>Category: Diezmo</strong>\t<strong>Amount:</strong> $" + diezmoAmounts[i] + "<br>";
+                result += "<strong>Category: Ofrenda</strong>\t<strong>Amount:</strong> $" + ofrendaAmounts[i] + "<br>";
+                result += "<strong>Category: Misiones</strong>\t<strong>Amount:</strong> $" + misionesAmounts[i] + "<br>";
+                result += "<strong>Category: Pro-t</strong>\t<strong>Amount:</strong> $" + protAmounts[i] + "<br>";
             }
 
             var total = calculateSum(diezmoAmounts) + calculateSum(ofrendaAmounts) + calculateSum(misionesAmounts) + calculateSum(protAmounts);
-            result += "\nOverall Total: $" + total.toFixed(2);
+            result += "<br><strong>Overall Total:</strong> $" + total.toFixed(2) + "</div>";
 
-            document.getElementById("result").innerText = result;
+            document.body.innerHTML += result;
         }
 
         function calculateSum(arr) {
